@@ -10,22 +10,27 @@ let game;
 class BasicThreeScene
 {
     _cubePos = [0,0,0];
-    _cameraPos = [0,0,60];
+    _cameraPos = [0,0,50];
     constructor(){
         // get your shit together
-        this._threeDeeZone = document.getElementById('threeDeeHolder');
+        this._threeDeeZone = document.getElementById('threeDeeHolder'); // **
         this._raycaster = new THREE.Raycaster();
         this._scene = new THREE.Scene();
-        this._renderer = new THREE.WebGLRenderer({antialias:true, alpha: true});
+        this._scene.background = new THREE.Color('blue');
+        this._renderer = new THREE.WebGLRenderer({antialias:true, alpha: true}); // **
         this._renderer.setPixelRatio(window.devicePixelRatio*0.35);
         this._renderer.setSize(this._threeDeeZone.clientWidth, this._threeDeeZone.clientWidth);
         this._renderer.setClearColor(0x000000,0);
-        this._camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 1000);
+        this._camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 1, 500);
         this._camera.position.set(this._cameraPos[0],this._cameraPos[1],this._cameraPos[2]);
-        this._scene.background = new THREE.Color('grey');
         this._controls = new OrbitControls(this._camera, this._renderer.domElement);
+        //this._controls.position.set(this._cameraPos[0],this._cameraPos[1],this._cameraPos[2]);
         this._controls.update();
+        this._controls.minDistance = 10;
+        this._controls.maxDistance = 100;
         this._controls.enableDampening = true;
+        this._controls.dampeningFactor = 0.05;
+
         // WASD
         //this._controls.keys = {LEFT:65, UP:87, RIGHT:68, BOTTOM:83};
         // ARROWS
@@ -38,15 +43,15 @@ class BasicThreeScene
         this._scene.add(this._light);
 
         // just throwing this out there
-        this._ambientLight = new THREE.AmbientLight( 0x222222 );
+        this._ambientLight = new THREE.AmbientLight( 0xffffff );
         this._scene.add(this._ambientLight);
-        this._threeDeeZone.appendChild(this._renderer.domElement);
+        this._threeDeeZone.appendChild(this._renderer.domElement); // ** 
         
         // listen to me!
-        //this._threeDeeZone.addEventListener("click", _ => console.log("ouch!"));
+        this._threeDeeZone.addEventListener("click", _ => console.log("ouch!"));
+        this._controls.target.set(this._cubePos[0],this._cubePos[1],this._cubePos[2]);
         window.addEventListener("resize", _ => {this.onWindowResize()});
-        // DO IT    (please note, setInterval is a temporary solution until i fix the requestanimationframe)
-        this._animator = setInterval(_=>{this.animate()},50);
+        this.animate();
     }
     onWindowResize(){
         this._camera.aspect = window.innerWidth/window.innerHeight;
@@ -55,7 +60,7 @@ class BasicThreeScene
     }
     getCube(){
         let cubeTexture = new THREE.TextureLoader().load("./dalma.jpg");
-        let cuber = new THREE.Mesh(new THREE.CubeGeometry(5,5,5), new THREE.MeshBasicMaterial({color:0xffff00d,map:cubeTexture, flatShading:false}));
+        let cuber = new THREE.Mesh(new THREE.CubeGeometry(5,5,5), new THREE.MeshBasicMaterial({color:0xfffffff,map:cubeTexture, flatShading:false}));
         cuber.position.set(this._cubePos[0],this._cubePos[1],this._cubePos[2]);
         return cuber;
     }
@@ -68,9 +73,11 @@ class BasicThreeScene
         return light;
     }
     animate() {
-        //window.requestAnimationFrame(this.animate);
-        //console.log("animating :P");
+        window.requestAnimationFrame(_ => {this.animate()});
         this._controls.update();
+        // do SOMETHING
+        this._cube.rotation.z +=0.01;
+        this._cube.rotation.y +=0.01;
         //this._controls.target.set(this._cubePos[0],this._cubePos[1],this._cubePos[2]);
         this._renderer.render(this._scene, this._camera);
     }

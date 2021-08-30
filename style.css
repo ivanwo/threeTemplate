@@ -1,11 +1,9 @@
 * {
     margin:0;
+    color: white;
 }
 h1{
     color: mediumseagreen;
-}
-li{
-    color: rebeccapurple
 }
 #dataHolder{
     position: absolute;
