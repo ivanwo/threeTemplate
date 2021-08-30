@@ -1,0 +1,17 @@
+* {
+    margin:0;
+}
+h1{
+    color: mediumseagreen;
+}
+li{
+    color: rebeccapurple
+}
+#threeDeeHolder {
+    position: fixed;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    z-index: -1;
+}
