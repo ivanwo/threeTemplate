@@ -7,6 +7,9 @@ h1{
 li{
     color: rebeccapurple
 }
+#dataHolder{
+    position: absolute;
+}
 #threeDeeHolder {
     position: fixed;
     top:0;
