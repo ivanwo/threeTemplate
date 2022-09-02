@@ -123,8 +123,9 @@ window.addEventListener("DOMContentLoaded", _ => {
     //game.getCube(0,5,0);
 });
 let getLastCommitDate = async _ => {
-    let data = await fetch(`https://api.github.com/repos/ivanwo/threeTemplate/events`).then(response => response.json()).then(body => body[0].created_at);
-    let timestamp = document.getElementById('timestamp');
-    timestamp.innerText = data;
+    let data = await fetch(`https://api.github.com/repos/ivanwo/threeTemplate`).then(response => response.json()).then(body => body.updated_at).then(data => {
+        let timestamp = document.getElementById('timestamp');
+        timestamp.innerText = data;
+    });
+
 }
-//export default BasicThreeScene;
